@@ -45,14 +45,16 @@ void Card() {
 }
 
 int main(void) {
-	RenderWindow window(VideoMode(1280, 720), "The Indian PokerGame!");
+	RenderWindow window(VideoMode(1280, 800), "The Indian PokerGame!");
 	
 	const int emotionsIndex = 4;
 	const int bettingIndex = 3;
 	std::string emotions[emotionsIndex] = { "Well...", "Good!", "OMG","idiot" };
 	std::string betting[bettingIndex] = { "+1", "+n", "All IN" };
-	Menu menu(window.getSize().x, window.getSize().y, emotionsIndex, emotions, 2);
-	Menu bettingMenu(window.getSize().x, window.getSize().y, bettingIndex, betting, 1);
+	Menu menu(window.getSize().x, window.getSize().y, emotionsIndex, emotions);
+	menu.setAlign(true); // true -> 가로정렬
+	menu.move(0, menu.getBottonline());
+	Menu bettingMenu(window.getSize().x, window.getSize().y, bettingIndex, betting);
 
 
 	Thread thread(&Card);
@@ -69,8 +71,6 @@ int main(void) {
 	while (window.isOpen()) {
 
 		Vector2i pos = Mouse::getPosition(window);
-
-
 
 		Event event;
 		while (window.pollEvent(event)) {
