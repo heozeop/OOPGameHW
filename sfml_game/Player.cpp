@@ -4,6 +4,7 @@
 
 Player::Player()
 {
+	
 }
 
 
@@ -23,11 +24,12 @@ void Player::earnMoney(int money) {
 	this->money += money;
 }
 
-void Player::betting(int money) {
+int Player::betting(int money) {
 	if (loseMoney(money)) {
 		isAll_In = true;
-		return;
 	}
+
+	return 0;
 }
 
 void Player::setCardNumber(int viewCard) {

@@ -4,7 +4,7 @@
 
 class Player
 {
-private:
+protected:
 	int money;
 	int viewCard;
 	bool isAll_In = false;
@@ -14,7 +14,7 @@ public:
 	~Player();
 	bool loseMoney(int money);
 	void earnMoney(int money);
-	virtual void betting(int money);
+	virtual int betting(int money);
 	void setCardNumber(int viewCard);
 	int getCardNumber();
 };
