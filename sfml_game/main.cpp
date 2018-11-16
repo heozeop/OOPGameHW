@@ -4,49 +4,17 @@
 */
 
 #include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
 #include "Menu.h"
+#include "Card.h"
 using namespace sf;
 
 
-void Card() {
-	RenderWindow window(VideoMode(500.f, 700.f), "Card");
-	
-	RectangleShape card;
-	card.setSize(Vector2f(500.f,700.f));
-
-	
-	Texture cardImage;
-
-	if (!cardImage.loadFromFile("Texture/trumpCards.png")) {
-		std::cout << "Couldn't find the card Imgae";
-	}
-
-
-	card.setTexture(&cardImage);
-
-	Vector2u textureSize = cardImage.getSize();
-	textureSize.x /= 9;
-	textureSize.y /= 6;
-	card.setTextureRect(IntRect(textureSize.x *2, textureSize.y*3, textureSize.x, textureSize.y));
-
-	while (window.isOpen()) {
-		Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == Event::Closed)
-				window.close();
-		}
-
-		window.clear(Color::White);
-		window.draw(card);
-		window.display();
-	}
-
-}
-
 int main(void) {
-	RenderWindow window(VideoMode(1280, 800), "The Indian PokerGame!");
+	const int videoSizeX = 1280;
+	const int videoSizeY = 800;
+	RenderWindow window(VideoMode(videoSizeX, videoSizeY), "The Indian PokerGame!");
 	
+	// Menu for user input
 	const int emotionsIndex = 4;
 	const int bettingIndex = 3;
 	std::string emotions[emotionsIndex] = { "Well...", "Good!", "OMG","idiot" };
@@ -56,15 +24,25 @@ int main(void) {
 	menu.move(0, menu.getBottonline());
 	Menu bettingMenu(window.getSize().x, window.getSize().y, bettingIndex, betting);
 
+	// Card class for manage card
+	Card playDeck;
 
-	Thread thread(&Card);
-	thread.launch();
+
 
 	Texture t1;
 	t1.loadFromFile("Texture/Surprised-Baby.jpg");
 
-	Sprite s1;
-	s1.setTexture(t1);
+	Texture board;
+	board.loadFromFile("Texture/boardTexture.jpg");
+
+	float lightSize = videoSizeY / 5;
+	CircleShape tableLite(lightSize);
+	tableLite.setFillColor(Color(255,255,255,20));
+	tableLite.setPosition(Vector2f((videoSizeX - lightSize*2)/2,(videoSizeY - lightSize*2)/2));
+
+
+	RectangleShape s1(Vector2f(150.f,200.f));
+
 	bool isMove = false;
 	float dx = 0, dy = 0;
 	
@@ -97,11 +75,13 @@ int main(void) {
 		if (isMove) s1.setPosition(pos.x - dx, pos.y - dy);
 		menu.highLight(pos);
 		bettingMenu.highLight(pos);
-
 		window.clear(Color(150,75,0));
-		window.draw(s1);
-		menu.draw(window);
-		bettingMenu.draw(window);
+		window.draw(tableLite);
+		//menu.draw(window);
+		//bettingMenu.draw(window);
+
+		playDeck.showCard( s1, window);
+
 		window.display();
 	}
 }

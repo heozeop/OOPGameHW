@@ -1,9 +1,8 @@
 #include "Card.h"
 
 Card::Card() {
-
 	// get cardset Image
-	if (!cardImage.loadFromFile("Textrue/turmpCardColorSet.png")) {
+	if (!cardImage.loadFromFile("Texture/turmpCardColorSet.png")) {
 		std::cout << "Can't find the card Images" << std::endl;
 		system("pause");
 	}
@@ -12,34 +11,33 @@ Card::Card() {
 	// this int values below are image dependent which means that according to image, the int values are diverse.
 	cardSize = cardImage.getSize();
 	cardSize.x /= 5;
-	cardSize.y /= 3;
+	cardSize.y = cardSize.y/3;
+
+
+	// get gridPosition of back of the card
+	gridCardPosition[0] = sf::Vector2u(4, 2);
 
 	// get gridPosition of each card(1~10)
-	for (int x = 0, int i; x < 2; x++) {
-		for (int y = 0; y < 5; y++) {
-			gridCardPosition[i].x = x;
-			gridCardPosition[i++].y = y;
+	for (int y = 0, i = 1; y < 2; y++) {
+		for (int x = 0; x < 5; x++) {
+			gridCardPosition[i++] = sf::Vector2u(x, y);
 		}
 	}
-	// get gridPosition of back of the card
-	gridCardPosition[10] = sf::Vector2u(2, 4) + cardSize;
 
 	// set all card be usable;
 	std::fill_n(usedCard, NUMBER_OF_TOTAL_CARD, true);
+
 }
 
 
-int Card::getCard() {
-	std::default_random_engine generator;
-	std::uniform_int_distribution<int> distribution(1, 10);
-	int pickedCard = distribution(generator);
 
-	return pickedCard;
-}
+void Card::showCard( sf::RectangleShape shape, sf::RenderWindow& window, int number){
+	if (number > 10 || number < 0) {
+		std::cout << "Out of array range" << std::endl;
+		return;
+	}
 
-void Card::showCard(int number, sf::RectangleShape shape, sf::RenderWindow& window) {
-	shape.setTexture(&cardImage);
-	shape.setTextureRect(sf::IntRect(cardSize.x * gridCardPosition[number].x, cardSize.y * gridCardPosition[number].y, gridCardPosition[number].x, gridCardPosition[number].y));
-
+	shape.setTexture(&cardImage, true);
+	shape.setTextureRect(sf::IntRect(gridCardPosition[number].x * cardSize.x,  gridCardPosition[number].y * cardSize.y, cardSize.x, cardSize.y));
 	window.draw(shape);
 }
