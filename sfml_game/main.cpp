@@ -6,10 +6,18 @@
 #include <SFML/Graphics.hpp>
 #include "Menu.h"
 #include "Card.h"
+#include "Player.h"
+#include "Enemy.h"
 using namespace sf;
 
 
 int main(void) {
+
+	bool playerTurn= true;
+	bool enemyTurn = false;
+	bool gameOver = false;
+	bool gameStart = true;
+
 	const int videoSizeX = 1280;
 	const int videoSizeY = 800;
 	RenderWindow window(VideoMode(videoSizeX, videoSizeY), "The Indian PokerGame!");
@@ -27,6 +35,8 @@ int main(void) {
 	// Card class for manage card
 	Card playDeck;
 
+	Player player;
+	Enemy enemy(emotions, emotionsIndex);
 
 
 	Texture t1;
@@ -50,6 +60,22 @@ int main(void) {
 
 		Vector2i pos = Mouse::getPosition(window);
 
+
+		if (gameStart) {
+
+			// draw card only when start game.
+			gameStart = false;
+
+			//get the card for player
+			int card = playDeck.getCard();
+			player.setCardNumber(card);
+
+			//get the card for enemy
+			card = playDeck.getCard();
+			enemy.setCardNumber(card);
+			//std::cout << enemy.getEmotion();
+		}
+
 		Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed)
@@ -63,7 +89,13 @@ int main(void) {
 						dy = pos.y - s1.getPosition().y;
 					}
 
+					if (menu.getClickedButton(pos) != -1) {
+						player.loseMoney(menu.getClickedButton(pos));
+						std::cout << menu.getClickedButton(pos) << std::endl;
+					}
+						
 				}
+
 			}
 
 			if (event.type == Event::MouseButtonReleased) {
@@ -77,7 +109,7 @@ int main(void) {
 		bettingMenu.highLight(pos);
 		window.clear(Color(150,75,0));
 		window.draw(tableLite);
-		//menu.draw(window);
+		menu.draw(window);
 		//bettingMenu.draw(window);
 
 		playDeck.showCard( s1, window);

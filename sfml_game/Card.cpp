@@ -27,6 +27,22 @@ Card::Card() {
 	// set all card be usable;
 	std::fill_n(usedCard, NUMBER_OF_TOTAL_CARD, true);
 
+	// set random seed
+	std::srand(std::time(NULL));
+}
+
+int Card::getCard() {
+	
+	
+	while (true) {
+		int index = std::rand()%20;
+		if (usedCard[index]) {
+			usedCard[index] = false;
+			std::cout << index << std::endl;
+			return index;
+		}
+	}
+	return -1;
 }
 
 
@@ -38,6 +54,6 @@ void Card::showCard( sf::RectangleShape shape, sf::RenderWindow& window, int num
 	}
 
 	shape.setTexture(&cardImage, true);
-	shape.setTextureRect(sf::IntRect(gridCardPosition[number].x * cardSize.x,  gridCardPosition[number].y * cardSize.y, cardSize.x, cardSize.y));
+	shape.setTextureRect(sf::IntRect(gridCardPosition[number+1].x * cardSize.x,  gridCardPosition[number+1].y * cardSize.y, cardSize.x, cardSize.y));
 	window.draw(shape);
 }

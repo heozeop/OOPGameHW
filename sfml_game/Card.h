@@ -3,7 +3,8 @@
 
 #include <SFML/Graphics.hpp> // Texture, Vector2u
 #include <iostream>// cout to give error on console
-#include <random>// Ramdom class
+#include <cstdlib>// for random
+#include <time.h>
 #include <algorithm>// fill_n
 
 
@@ -21,6 +22,7 @@ private:
 
 public:
 	Card();
+	int getCard();
 	void showCard( sf::RectangleShape shape, sf::RenderWindow& window, int number = 0);
 };
 
