@@ -1,7 +1,7 @@
 #pragma once
 #include "Player.h"
 #include <string>
-#include <random>
+#include <cstdlib>
 
 class Enemy : public Player
 {
@@ -22,7 +22,8 @@ public:
 	virtual int betting(int money) override;
 	void setEmotion(int emotionType);
 	void updateWhanTurnStart();
-	void updateWhenTurnEnd(bool win);
+	void updateWhenTurnEnd(bool win, int enemyCardNumber);
 	std::string getEmotion();
+	void resetCard();
 };
 

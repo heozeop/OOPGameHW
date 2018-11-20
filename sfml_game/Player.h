@@ -5,8 +5,8 @@
 class Player
 {
 protected:
-	int money;
-	int viewCard;
+	int money = 20;
+	int viewCard = 0;
 	bool isAll_In = false;
 
 public:
@@ -17,6 +17,8 @@ public:
 	virtual int betting(int money);
 	void setCardNumber(int viewCard);
 	int getCardNumber();
+	int getLeftMoney();
+	bool isAllin();
 };
 
 #endif

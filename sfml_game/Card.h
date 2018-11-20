@@ -24,6 +24,7 @@ public:
 	Card();
 	int getCard();
 	void showCard( sf::RectangleShape shape, sf::RenderWindow& window, int number = 0);
+	bool checkUseAll();
 };
 
 

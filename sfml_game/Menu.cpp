@@ -34,11 +34,13 @@ Menu::Menu(unsigned int width, unsigned int height, int numebrOfButtons, std::st
 	for (int i = 0; i < numebrOfButtons; i++) {
 		sf::Vector2f temp(10.f, (offsetY + 10.f)*i + height / 2);
 		buttons[i].setFont(font);
-		buttons[i].setPosition(intervalForDesign + temp + sf::Vector2f(50.f, offsetY/2 - buttons[i].getCharacterSize()/2-5) );
+		buttons[i].setPosition(intervalForDesign + temp + sf::Vector2f(50.f, offsetY - buttons[i].getCharacterSize()/2-5) );
 		buttons[i].setString(nameOfButtons[i]);
 
 		buttonSquare[i].setSize(sf::Vector2f(buttonSize, offsetY));
+		buttonSquare[i].setFillColor(sf::Color::Black);
 		buttonSquare[i].setPosition(temp + intervalForDesign);
+		buttonSquare[i].setOutlineColor(sf::Color::Green); // 나중에 선택가능할 때 표시함.
 	}
 
 	this->numebrOfButtons = numebrOfButtons;
@@ -76,6 +78,7 @@ int Menu::getClickedButton(sf::Vector2i mousePosition) {
 		if (buttonSquare[i].getGlobalBounds().contains(mousePosition.x, mousePosition.y))
 			return i;
 	}
+	return -1;
 }
 
 // 정렬을 다시 해주는 함수. 가로 세로 정렬중에 결정할 수 있다.
@@ -92,7 +95,7 @@ void Menu::setAlign(bool sortType) { // sortType == false => 세로/ true => 가로
 			temp.y = (offsetY + 10.f)*i + height / 2;
 
 	
-		buttons[i].setPosition(temp + sf::Vector2f(50.f, offsetY / 2 - buttons[i].getCharacterSize() / 2 - 5));
+		buttons[i].setPosition(temp + sf::Vector2f(20.f,20.f));//+sf::Vector2f(50.f, offsetY / 2 - buttons[i].getCharacterSize() / 2 - 5));
 		
 		buttonSquare[i].setPosition(temp);
 	}
@@ -118,4 +121,28 @@ void Menu::move(int gridPositionX,int gridPositionY) {
 		buttons[i].setPosition(buttons[i].getPosition() + position);
 		buttonSquare[i].setPosition(buttonSquare[i].getPosition() + position);
 	}
+}
+
+void Menu::setButtonString(std::string name, int button) {
+	buttons[button].setString(name);
+}
+
+void Menu::setOutLineOfButton(int index, bool setOn = false) {
+	if (setOn) {
+		buttonSquare[index].setOutlineThickness(2.f);
+	}
+
+	buttonSquare[index].setOutlineThickness(0.f);
+}
+
+void Menu::setOnBlack(int index, bool setOn) {
+	if (setOn) {
+		buttons[index].setFillColor(sf::Color::White);
+		buttonSquare[index].setFillColor(sf::Color::Black);
+	}
+	else {
+		buttons[index].setFillColor(sf::Color::Black);
+		buttonSquare[index].setFillColor(sf::Color::White);
+	}
+
 }

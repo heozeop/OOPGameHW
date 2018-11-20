@@ -33,15 +33,15 @@ Card::Card() {
 
 int Card::getCard() {
 	
-	
 	while (true) {
 		int index = std::rand()%20;
 		if (usedCard[index]) {
 			usedCard[index] = false;
-			std::cout << index << std::endl;
 			return index;
-		}
+		}	
 	}
+
+
 	return -1;
 }
 
@@ -54,6 +54,16 @@ void Card::showCard( sf::RectangleShape shape, sf::RenderWindow& window, int num
 	}
 
 	shape.setTexture(&cardImage, true);
-	shape.setTextureRect(sf::IntRect(gridCardPosition[number+1].x * cardSize.x,  gridCardPosition[number+1].y * cardSize.y, cardSize.x, cardSize.y));
+	shape.setTextureRect(sf::IntRect(gridCardPosition[number%10+1].x * cardSize.x,  gridCardPosition[number%10+1].y * cardSize.y, cardSize.x, cardSize.y));
 	window.draw(shape);
+}
+
+bool Card::checkUseAll() {
+	for (int i = 0; i < NUMBER_OF_TOTAL_CARD; i++)
+		if (usedCard[i]) return false;// 하나라도 카드있으면 리턴
+
+	for (int i = 0; i < NUMBER_OF_TOTAL_CARD; i++) //다썼으면 원상태로 만듦.
+		usedCard[i] = true;
+
+	return true;
 }

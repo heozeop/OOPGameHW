@@ -36,6 +36,9 @@ public :
 	void move(int gridPositionX, int gridPositionY); // direction은 상하(true)/좌우(false) 결정
 	int getBottonline() { return gridOffsetY - 1; }
 	int getRightMostLine() { return gridOffsetX - 1; }
+	void setButtonString(std::string name, int button);
+	void setOutLineOfButton(int index, bool setOn);
+	void setOnBlack(int index, bool setOn);
 };
 
 #endif
