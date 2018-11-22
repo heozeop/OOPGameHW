@@ -31,6 +31,7 @@ Card::Card() {
 	std::srand(std::time(NULL));
 }
 
+// 0~19사이의 숫자를 리턴하고 기록을 남깁니다.
 int Card::getCard() {
 	
 	while (true) {
@@ -38,7 +39,7 @@ int Card::getCard() {
 		if (usedCard[index]) {
 			usedCard[index] = false;
 			return index;
-		}	
+		}
 	}
 
 
@@ -46,19 +47,26 @@ int Card::getCard() {
 }
 
 
-
+// shape에 number에 해당하는 texture를 입혀 window에 띄워줍니다.
 void Card::showCard( sf::RectangleShape shape, sf::RenderWindow& window, int number){
-	if (number > 10 || number < 0) {
+	if (number%11 > 10 || number < -1) {
 		std::cout << "Out of array range" << std::endl;
 		return;
 	}
 
+	int gridposition;
+	if (number == -1)
+		gridposition = 0;
+	else
+		gridposition = number % 10 + 1;
+
 	shape.setTexture(&cardImage, true);
-	shape.setTextureRect(sf::IntRect(gridCardPosition[number%10+1].x * cardSize.x,  gridCardPosition[number%10+1].y * cardSize.y, cardSize.x, cardSize.y));
+	shape.setTextureRect(sf::IntRect(gridCardPosition[gridposition].x * cardSize.x,  gridCardPosition[gridposition].y * cardSize.y, cardSize.x, cardSize.y));
 	window.draw(shape);
 }
 
-bool Card::checkUseAll() {
+//카드를 다 썼는 지 검사하고 다썼으면 다시 뽑을 수 있도록 만듭니다.
+bool Card::checkUseAllAndThenReset() {
 	for (int i = 0; i < NUMBER_OF_TOTAL_CARD; i++)
 		if (usedCard[i]) return false;// 하나라도 카드있으면 리턴
 

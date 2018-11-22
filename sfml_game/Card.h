@@ -22,9 +22,9 @@ private:
 
 public:
 	Card();
-	int getCard();
-	void showCard( sf::RectangleShape shape, sf::RenderWindow& window, int number = 0);
-	bool checkUseAll();
+	int getCard(); // 0~19 사이의 숫자를 리턴합니다.
+	void showCard( sf::RectangleShape shape, sf::RenderWindow& window, int number = 0); // 카드를 보여줍니다.
+	bool checkUseAllAndThenReset();// 카드를 다 사용했으면 다시 사용할 수 있도록 합니다.
 };
 
 

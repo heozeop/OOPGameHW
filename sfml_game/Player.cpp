@@ -12,14 +12,17 @@ Player::~Player()
 {
 }
 
-bool Player::loseMoney(int money) {
-
+int Player::loseMoney(int money) {
+	int returnMpney;
 	if (this->money < money) { 
-		return true; // need All in
+		returnMpney = this->money;
+		this->money = 0;
+		isAll_In = true;
+		return returnMpney; // need All in
 	}
 
 	this->money -= money;
-	return false;
+	return money;
 }
 
 void Player::earnMoney(int money) {
@@ -27,14 +30,7 @@ void Player::earnMoney(int money) {
 }
 
 int Player::betting(int money) {
-	int answer = money;
-	if (loseMoney(money)) {//all in 여부 판단
-		isAll_In = true;
-		answer = this->money;
-		this->money = 0;
-	}
-
-	return answer;
+	return loseMoney(money);;
 }
 
 void Player::setCardNumber(int viewCard) {
@@ -51,4 +47,10 @@ int Player::getLeftMoney() {
 
 bool Player::isAllin() {
 	return isAll_In;
+}
+
+void Player::reset() {
+	this->money = 20;
+	this->viewCard = 0;
+	this->isAll_In = false;
 }

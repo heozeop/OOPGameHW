@@ -29,7 +29,7 @@ Enemy::Enemy(std::string emotions[], int numberOfEmotions)
 	
 
 	std::fill_n(usedCard, 20, true);
-	std::srand(std::time(NULL));
+	std::srand(std::time(NULL)); // 랜덤 선택을 위한 시드값을 넣어줍니다.
 }
 
 
@@ -41,37 +41,37 @@ Enemy::~Enemy()
 
 int Enemy::betting(int money) {
 	int bettingMoney = 0;
+	chooseOne = 0;
 
-	//무조건 이기거나 비김.
-	if (viewCard == 1) {
+	//1보면 무조건 이기거나 비김.
+	if (viewCard % 10 + 1 == 1) {
 		bettingMoney = money * 3;
-		if (this->loseMoney(bettingMoney)) { // All in 여부 판단
-			bettingMoney = this->money;
-			isAll_In = true;
-			this->money = 0;
-		}
-		return money * 3;
+		bettingMoney = this->loseMoney(bettingMoney);
+		chooseOne = 3;
+		return bettingMoney;
 	}
 
-	if (winRate > 90) 
+	if (winRate > 90) {
 		bettingMoney = money;
-	
-	if (winRate > 80) 
+		chooseOne = 4;
+	}
+	else if (winRate > 80) {
 		bettingMoney = money * 3;
-	
-	if (winRate > 70)
+		chooseOne = 3;
+	}
+	else if (winRate > 70) {
 		bettingMoney = money * 2;
-	if (winRate > 50)
-		bettingMoney = money;
-
-	winRate -= 10;
-
-	if (this->loseMoney(bettingMoney)) { // All in 여부 판단
-		bettingMoney = this->money;
-		isAll_In = true;
-		this->money = 0;
+		chooseOne = 2;
 	}
-	
+	else if (winRate > 50) {
+		bettingMoney = money;
+		chooseOne = 1;
+	}
+
+	// 가중치 
+	winRate += rand() % 2 * 10;
+
+	bettingMoney = this->loseMoney(bettingMoney); // All in 여부 판단
 	return bettingMoney;
 }
 
@@ -85,7 +85,7 @@ void Enemy::updateWhanTurnStart() {
 		winRate -= emotionsWeight[i];
 }
 
-void Enemy::updateWhenTurnEnd(bool win, int enemyCardNumber) {
+void Enemy::updateWhenTurnEnd(const bool win, int enemyCardNumber) {
 	int type;
 	if (win)
 		type = 1;
@@ -109,5 +109,27 @@ std::string Enemy::getEmotion() {
 void Enemy::resetCard() {
 	for (int i = 0; i < 20; i++) {
 		usedCard[i] = true;
+	}
+}
+
+void Enemy::reset() {
+	for (int i = 0; i < 20; i++)
+		usedCard[i] = true;
+	numberOfUsedCard = 0;
+	Player::reset();
+}
+
+std::string Enemy::getChoosesString() { // 5개만 하도록 했는데 고치려면 다고쳐야 되서 확장성이 없는 함수입니다.
+	switch (chooseOne) {
+	case 4:
+		return "Well...";
+	case 3:
+		return "Go Triple";
+	case 2:
+		return "Go double";
+	case 1:
+		return "Call";
+	default:
+		return "Die";
 	}
 }
